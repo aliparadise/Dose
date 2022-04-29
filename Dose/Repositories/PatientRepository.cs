@@ -23,7 +23,7 @@ namespace Dose.Repositories
             }
         }
 
-        public List<Patient> GetAllPatients()
+        public List<Patient> GetAllPatientsByUserId(int userProfileId)
         {
             using (SqlConnection conn = Connection)
             {
@@ -31,10 +31,12 @@ namespace Dose.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT p.Id, p.UserProfileId, p.FirstName, p.LastName, p.Age, p.Weight, p.Notes
-                    FROM Patient p
-                    JOIN UserProfile up ON up.Id = p.UserProfileId
+                    SELECT Id, UserProfileId, FirstName, LastName, Age, Weight, Notes
+                    FROM Patient 
+                    WHERE UserProfileId = @userProfileId
                     ";
+
+                    cmd.Parameters.AddWithValue("@userProfileId", userProfileId);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -50,10 +52,6 @@ namespace Dose.Repositories
                                 Age = reader.GetInt32(reader.GetOrdinal("Age")),
                                 Weight = reader.GetDecimal(reader.GetOrdinal("Weight")),
                                 Notes = DbUtils.GetNullableString(reader, "Notes"),
-                                UserProfile = new UserProfile()
-                                {
-                                    Id = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
-                                }
                             };
 
                             patients.Add(patient);

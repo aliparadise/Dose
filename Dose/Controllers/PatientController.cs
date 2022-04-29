@@ -3,6 +3,7 @@ using Dose.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Dose.Controllers
 {
@@ -18,7 +19,9 @@ namespace Dose.Controllers
          // GET: PatientController
         public ActionResult Index()
         {
-            List<Patient> patients = _patientRepo.GetAllPatients();
+            int userProfileId = GetCurrentUserId();
+
+            List<Patient> patients = _patientRepo.GetAllPatientsByUserId(userProfileId);
             return View(patients);
         }
 
@@ -90,6 +93,11 @@ namespace Dose.Controllers
             {
                 return View();
             }
+        }
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
