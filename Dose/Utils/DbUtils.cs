@@ -13,6 +13,11 @@ namespace Dose.Utils
                 return null;
             }
             return reader.GetString(ordinal);
+
+        }
+        public static object ValueOrDBNull(object value)
+        {
+            return value ?? DBNull.Value;
         }
     }
 }

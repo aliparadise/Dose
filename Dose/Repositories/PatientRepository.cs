@@ -82,7 +82,7 @@ namespace Dose.Repositories
                     cmd.Parameters.AddWithValue("@lastName", patient.LastName);
                     cmd.Parameters.AddWithValue("@age", patient.Age);
                     cmd.Parameters.AddWithValue("@weight", patient.Weight);
-                    cmd.Parameters.AddWithValue("@notes", patient.Notes);
+                    cmd.Parameters.AddWithValue("@notes", DbUtils.ValueOrDBNull(patient.Notes));
 
                     int id = (int)cmd.ExecuteScalar();
 
