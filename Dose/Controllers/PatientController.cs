@@ -2,6 +2,7 @@
 using Dose.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 
@@ -44,12 +45,15 @@ namespace Dose.Controllers
         {
             try
             {
+                patient.UserProfileId = GetCurrentUserId();
+
                 _patientRepo.AddPatient(patient);
-                return RedirectToAction(nameof(Index));
+                
+                return RedirectToAction("Index");
             }
-            catch
+            catch(Exception Ex)
             {
-                return View();
+                return View(patient);
             }
         }
 
