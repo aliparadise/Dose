@@ -31,6 +31,7 @@ namespace Dose
             services.AddTransient<IFirebaseAuthService, FirebaseAuthService>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IPatientRepository, PatientRepository>();
+            services.AddTransient<IPatientMedicationRepository, PatientMedicationRepository>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

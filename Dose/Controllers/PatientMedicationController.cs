@@ -2,72 +2,61 @@
 using Dose.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace Dose.Controllers
 {
-    public class PatientController : Controller
+    public class PatientMedicationController : Controller
     {
-        private readonly IPatientRepository _patientRepo;
         private readonly IPatientMedicationRepository _patientMedicationRepo;
 
-        public PatientController(
-            IPatientRepository patientRepository,
-            IPatientMedicationRepository patientMedicationRepository)
+        public PatientMedicationController(IPatientMedicationRepository patientMedicationRepository)
         {
-            _patientRepo = patientRepository;
             _patientMedicationRepo = patientMedicationRepository;
         }
-
-        // GET: PatientController
+        // GET: PatientMedicationController
         public ActionResult Index()
         {
-            int userProfileId = GetCurrentUserId();
-
-            List<Patient> patients = _patientRepo.GetAllPatientsByUserId(userProfileId);
-            return View(patients);
+            int patientId = GetCurrentPatientId();
+            List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(patientId);
+            return View(patientMedications);
         }
 
-        // GET: PatientController/Details/5
+        // GET: PatientMedicationController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: PatientController/Create
+        // GET: PatientMedicationController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: PatientController/Create
+        // POST: PatientMedicationController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Patient patient)
+        public ActionResult Create(IFormCollection collection)
         {
             try
             {
-                patient.UserProfileId = GetCurrentUserId();
-
-                _patientRepo.AddPatient(patient);
-
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception Ex)
+            catch
             {
-                return View(patient);
+                return View();
             }
         }
 
-        // GET: PatientController/Edit/5
+        // GET: PatientMedicationController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: PatientController/Edit/5
+        // POST: PatientMedicationController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -82,13 +71,13 @@ namespace Dose.Controllers
             }
         }
 
-        // GET: PatientController/Delete/5
+        // GET: PatientMedicationController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: PatientController/Delete/5
+        // POST: PatientMedicationController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
@@ -102,14 +91,7 @@ namespace Dose.Controllers
                 return View();
             }
         }
-
-        public ActionResult ManageMeds(int id)
-        {
-            
-            List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
-            return View(patientMedications);
-        }
-        private int GetCurrentUserId()
+        private int GetCurrentPatientId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);

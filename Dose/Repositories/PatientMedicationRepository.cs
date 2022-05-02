@@ -1,4 +1,8 @@
-﻿using Dose.Models;
+﻿//using Dose.Models;
+//using Dose.Utils;
+//using Microsoft.Data.SqlClient;
+using Dose.Models;
+using Dose.Utils;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -9,7 +13,7 @@ namespace Dose.Repositories
     {
         private readonly IConfiguration _config;
 
-        public PatientRepository(IConfiguration config)
+        public PatientMedicationRepository(IConfiguration config)
         {
             _config = config;
         }
@@ -21,7 +25,7 @@ namespace Dose.Repositories
             }
         }
 
-        public List<PatientMedication> GetAllPatientMedicationByPatientId(int patientId)
+        public List<PatientMedication> GetAllPatientMedicationsByPatientId(int patientId)
         {
             using (SqlConnection conn = Connection)
             {
@@ -41,29 +45,40 @@ namespace Dose.Repositories
                     ";
 
                     cmd.Parameters.AddWithValue("@patientid", patientId);
-                    
+
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        List<Patient> patients = new List<Patient>();
+                        List<PatientMedication> patientMedications = new List<PatientMedication>();
                         while (reader.Read())
                         {
-                            Patient patient = new Patient
+                            PatientMedication patientMedication = new PatientMedication
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
-                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                                Age = reader.GetInt32(reader.GetOrdinal("Age")),
-                                Weight = reader.GetDecimal(reader.GetOrdinal("Weight")),
+                                PatientId = reader.GetInt32(reader.GetOrdinal("PatientId")),
+                                MedicationId = reader.GetInt32(reader.GetOrdinal("MedicationId")),
+                                Dosage = reader.GetString(reader.GetOrdinal("Dosage")),
+                                Frequency = reader.GetString(reader.GetOrdinal("Frequency")),
+                                Duration = reader.GetString(reader.GetOrdinal("Duration")),
                                 Notes = DbUtils.GetNullableString(reader, "Notes"),
+                                Medication = new Medication
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                    MedicationName = reader.GetString(reader.GetOrdinal("MedicationName"))
+                                },
+                                Patient = new Patient
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                }
+
                             };
 
-                            patients.Add(patient);
+                            patientMedications.Add(patientMedication);
 
                         }
 
-                        return patients;
+                        return patientMedications;
 
                     }
                 }

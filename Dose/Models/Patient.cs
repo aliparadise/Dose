@@ -14,6 +14,7 @@ namespace Dose.Models
         public decimal Weight { get; set; }
         public string Notes { get; set; }
         public UserProfile UserProfile { get; set; }
+        public PatientMedication PatientMedication { get; set; }
     }
 }
 
