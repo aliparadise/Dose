@@ -6,7 +6,7 @@ namespace Dose.Models
     {
         public int Id { get; set; }
         public int UserProfileId { get; set; }
-        [DisplayName("First Name")]
+        [DisplayName("Patient Name")]
         public string FirstName { get; set; }
         [DisplayName("Last Name")]
         public string LastName { get; set; }

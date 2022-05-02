@@ -103,9 +103,16 @@ namespace Dose.Controllers
             }
         }
 
-        public ActionResult ManageMeds(int id)
-        {
+        //public ActionResult ManageMeds(int id)
+        //{
             
+        //    List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
+        //    return View(patientMedications);
+        //}
+
+        public ActionResult MedicationDetails(int id)
+        {
+
             List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
             return View(patientMedications);
         }
