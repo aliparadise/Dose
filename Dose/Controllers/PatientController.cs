@@ -11,13 +11,17 @@ namespace Dose.Controllers
     public class PatientController : Controller
     {
         private readonly IPatientRepository _patientRepo;
+        private readonly IPatientMedicationRepository _patientMedicationRepo;
 
-        public PatientController(IPatientRepository patientRepository)
+        public PatientController(
+            IPatientRepository patientRepository,
+            IPatientMedicationRepository patientMedicationRepository)
         {
             _patientRepo = patientRepository;
+            _patientMedicationRepo = patientMedicationRepository;
         }
 
-         // GET: PatientController
+        // GET: PatientController
         public ActionResult Index()
         {
             int userProfileId = GetCurrentUserId();
@@ -48,10 +52,10 @@ namespace Dose.Controllers
                 patient.UserProfileId = GetCurrentUserId();
 
                 _patientRepo.AddPatient(patient);
-                
+
                 return RedirectToAction("Index");
             }
-            catch(Exception Ex)
+            catch (Exception Ex)
             {
                 return View(patient);
             }
@@ -97,6 +101,13 @@ namespace Dose.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult ManageMeds(int id)
+        {
+            
+            List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
+            return View(patientMedications);
         }
         private int GetCurrentUserId()
         {
