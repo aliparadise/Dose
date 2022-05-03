@@ -112,7 +112,7 @@ namespace Dose.Controllers
             return View(patientMedications);
         }
 
-        public ActionResult CreatePatientMedication()
+        public ActionResult CreatePatientMedication(int id)
         {
             List<Medication> medications = _medicationRepo.GetAllMedications();
 
@@ -127,10 +127,11 @@ namespace Dose.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreatePatientMedication(PatientMedication patientMedication)
+        public ActionResult CreatePatientMedication(int id, PatientMedication patientMedication)
         {
             try
             {
+
                 _patientMedicationRepo.AddPatientMedication(patientMedication);
                 return RedirectToAction("Index");
             }

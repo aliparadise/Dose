@@ -107,6 +107,7 @@ namespace Dose.Repositories
                     int id = (int)cmd.ExecuteScalar();
 
                     patientMedication.Id = id;
+                    
                 }
             }
         }
