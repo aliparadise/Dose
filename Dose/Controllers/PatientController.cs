@@ -102,19 +102,31 @@ namespace Dose.Controllers
                 return View();
             }
         }
-
-        //public ActionResult ManageMeds(int id)
-        //{
-            
-        //    List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
-        //    return View(patientMedications);
-        //}
-
         public ActionResult MedicationDetails(int id)
         {
 
             List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
             return View(patientMedications);
+        }
+
+        public ActionResult CreatePatientMedication()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreatePatientMedication(PatientMedication patientMedication)
+        {
+            try
+            {
+                _patientMedicationRepo.AddPatientMedication(patientMedication);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
         }
         private int GetCurrentUserId()
         {
