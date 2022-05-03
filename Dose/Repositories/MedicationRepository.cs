@@ -1,4 +1,5 @@
 ﻿using Dose.Models;
+using Dose.Utils;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -42,8 +43,8 @@ namespace Dose.Repositories
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                                 MedicationName = reader.GetString(reader.GetOrdinal("MedicationName")),
-                                Interaction = reader.GetString(reader.GetOrdinal("Interaction")),
-                                Instruction = reader.GetString(reader.GetOrdinal("Instruction")),
+                                Interaction = DbUtils.GetNullableString(reader, "Interaction"),
+                                Instruction = DbUtils.GetNullableString(reader, "Instruction"),
                             };
 
                             medications.Add(medication);

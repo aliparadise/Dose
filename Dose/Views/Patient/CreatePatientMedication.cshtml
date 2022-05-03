@@ -1,4 +1,4 @@
-﻿@model Dose.Models.PatientMedication
+﻿@model Dose.Models.CreatePatientMedicationFormViewModel
 
 @{
     ViewData["Title"] = "CreatePatientMedication";
@@ -13,29 +13,35 @@
         <form asp-action="CreatePatientMedication">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="MedicationId" class="control-label"></label>
-                <input asp-for="MedicationId" class="form-control" />
-                <span asp-validation-for="MedicationId" class="text-danger"></span>
+                <label asp-for="PatientMedication.MedicationId" class="control-label"></label>
+                <select asp-for="PatientMedication.MedicationId" class="form-control" >
+                    <option value="">Select Medication</option>
+                    @foreach (Medication medication in Model.Medications)
+                {
+                    <option value="@medication.Id">@medication.MedicationName</option>
+                }
+                </select>
+                <span asp-validation-for="PatientMedication.MedicationId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Dosage" class="control-label"></label>
-                <input asp-for="Dosage" class="form-control" />
-                <span asp-validation-for="Dosage" class="text-danger"></span>
+                <label asp-for="PatientMedication.Dosage" class="control-label"></label>
+                <input asp-for="PatientMedication.Dosage" class="form-control" />
+                <span asp-validation-for="PatientMedication.Dosage" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Frequency" class="control-label"></label>
-                <input asp-for="Frequency" class="form-control" />
-                <span asp-validation-for="Frequency" class="text-danger"></span>
+                <label asp-for="PatientMedication.Frequency" class="control-label"></label>
+                <input asp-for="PatientMedication.Frequency" class="form-control" />
+                <span asp-validation-for="PatientMedication.Frequency" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
-                <span asp-validation-for="Duration" class="text-danger"></span>
+                <label asp-for="PatientMedication.Duration" class="control-label"></label>
+                <input asp-for="PatientMedication.Duration" class="form-control" />
+                <span asp-validation-for="PatientMedication.Duration" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Notes" class="control-label"></label>
-                <input asp-for="Notes" class="form-control" />
-                <span asp-validation-for="Notes" class="text-danger"></span>
+                <label asp-for="PatientMedication.Notes" class="control-label"></label>
+                <input asp-for="PatientMedication.Notes" class="form-control" />
+                <span asp-validation-for="PatientMedication.Notes" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -12,13 +12,16 @@ namespace Dose.Controllers
     {
         private readonly IPatientRepository _patientRepo;
         private readonly IPatientMedicationRepository _patientMedicationRepo;
+        private readonly IMedicationRepository _medicationRepo;
 
         public PatientController(
             IPatientRepository patientRepository,
-            IPatientMedicationRepository patientMedicationRepository)
+            IPatientMedicationRepository patientMedicationRepository,
+            IMedicationRepository medicationRepository)
         {
             _patientRepo = patientRepository;
             _patientMedicationRepo = patientMedicationRepository;
+            _medicationRepo = medicationRepository;
         }
 
         // GET: PatientController
@@ -111,7 +114,15 @@ namespace Dose.Controllers
 
         public ActionResult CreatePatientMedication()
         {
-            return View();
+            List<Medication> medications = _medicationRepo.GetAllMedications();
+
+            CreatePatientMedicationFormViewModel vm = new CreatePatientMedicationFormViewModel()
+            {
+                PatientMedication = new PatientMedication(),
+                Medications = medications,
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
@@ -123,9 +134,16 @@ namespace Dose.Controllers
                 _patientMedicationRepo.AddPatientMedication(patientMedication);
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                CreatePatientMedicationFormViewModel vm = new CreatePatientMedicationFormViewModel()
+                {
+                    PatientMedication = patientMedication,
+                    Medications = _medicationRepo.GetAllMedications()
+                };
+
+                return View(vm);
+
             }
         }
         private int GetCurrentUserId()
