@@ -117,7 +117,8 @@ namespace Dose.Controllers
             List<Medication> medications = _medicationRepo.GetAllMedications();
 
             CreatePatientMedicationFormViewModel vm = new CreatePatientMedicationFormViewModel()
-            {
+            {   
+               
                 PatientMedication = new PatientMedication(),
                 Medications = medications,
             };
@@ -131,7 +132,7 @@ namespace Dose.Controllers
         {
             try
             {
-
+                patientMedication.PatientId = id;
                 _patientMedicationRepo.AddPatientMedication(patientMedication);
                 return RedirectToAction("Index");
             }

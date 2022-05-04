@@ -1,9 +1,12 @@
-﻿namespace Dose.Models
+﻿using System.ComponentModel;
+
+namespace Dose.Models
 {
     public class PatientMedication
     {
         public int Id { get; set; }
         public int PatientId { get; set; }
+        [DisplayName("Medication Name")]
         public int MedicationId { get; set; }
         public string Dosage { get; set; }
         public string Frequency { get; set; }
