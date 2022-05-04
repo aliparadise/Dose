@@ -12,13 +12,16 @@ namespace Dose.Controllers
     {
         private readonly IPatientRepository _patientRepo;
         private readonly IPatientMedicationRepository _patientMedicationRepo;
+        private readonly IMedicationRepository _medicationRepo;
 
         public PatientController(
             IPatientRepository patientRepository,
-            IPatientMedicationRepository patientMedicationRepository)
+            IPatientMedicationRepository patientMedicationRepository,
+            IMedicationRepository medicationRepository)
         {
             _patientRepo = patientRepository;
             _patientMedicationRepo = patientMedicationRepository;
+            _medicationRepo = medicationRepository;
         }
 
         // GET: PatientController
@@ -102,19 +105,48 @@ namespace Dose.Controllers
                 return View();
             }
         }
-
-        //public ActionResult ManageMeds(int id)
-        //{
-            
-        //    List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
-        //    return View(patientMedications);
-        //}
-
         public ActionResult MedicationDetails(int id)
         {
 
             List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
             return View(patientMedications);
+        }
+
+        public ActionResult CreatePatientMedication(int id)
+        {
+            List<Medication> medications = _medicationRepo.GetAllMedications();
+
+            CreatePatientMedicationFormViewModel vm = new CreatePatientMedicationFormViewModel()
+            {   
+               
+                PatientMedication = new PatientMedication(),
+                Medications = medications,
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreatePatientMedication(int id, PatientMedication patientMedication)
+        {
+            try
+            {
+                patientMedication.PatientId = id;
+                _patientMedicationRepo.AddPatientMedication(patientMedication);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                CreatePatientMedicationFormViewModel vm = new CreatePatientMedicationFormViewModel()
+                {
+                    PatientMedication = patientMedication,
+                    Medications = _medicationRepo.GetAllMedications()
+                };
+
+                return View(vm);
+
+            }
         }
         private int GetCurrentUserId()
         {

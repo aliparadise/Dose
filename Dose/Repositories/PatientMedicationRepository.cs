@@ -84,5 +84,32 @@ namespace Dose.Repositories
                 }
             }
         }
+        public void AddPatientMedication(PatientMedication patientMedication)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    INSERT INTO PatientMedication (PatientId, MedicationId, Dosage, Frequency, Duration, Notes)
+                    OUTPUT INSERTED.ID
+                    VALUES (@patientId, @medicationId, @dosage, @frequency, @duration, @notes);
+                ";
+
+                    cmd.Parameters.AddWithValue("@patientId", patientMedication.PatientId);
+                    cmd.Parameters.AddWithValue("@medicationId", patientMedication.MedicationId);
+                    cmd.Parameters.AddWithValue("@dosage", patientMedication.Dosage);
+                    cmd.Parameters.AddWithValue("@frequency", patientMedication.Frequency);
+                    cmd.Parameters.AddWithValue("@duration", patientMedication.Duration);
+                    cmd.Parameters.AddWithValue("@notes", DbUtils.ValueOrDBNull(patientMedication.Notes));
+
+                    int id = (int)cmd.ExecuteScalar();
+
+                    patientMedication.Id = id;
+                    
+                }
+            }
+        }
     }
 }

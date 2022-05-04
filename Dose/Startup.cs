@@ -32,6 +32,7 @@ namespace Dose
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IPatientRepository, PatientRepository>();
             services.AddTransient<IPatientMedicationRepository, PatientMedicationRepository>();
+            services.AddTransient<IMedicationRepository, MedicationRepository>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

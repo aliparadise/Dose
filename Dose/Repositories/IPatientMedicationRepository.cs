@@ -6,5 +6,6 @@ namespace Dose.Repositories
     public interface IPatientMedicationRepository
     {
         List<PatientMedication> GetAllPatientMedicationsByPatientId(int patientId);
+        void AddPatientMedication(PatientMedication patientMedication);
     }
 }

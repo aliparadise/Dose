@@ -7,7 +7,7 @@
 <h1>Patient Medication Details</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @Html.ActionLink("Create New Patient Medication", "CreatePatientMedication", new { id=ViewContext.RouteData.Values["id"]})
 </p>
 
 <table class="table">
