@@ -186,6 +186,44 @@ namespace Dose.Controllers
 
             }
         }
+
+        public ActionResult DeletePatientMedication(int id)
+        {
+            PatientMedicationFormViewModel vm = new PatientMedicationFormViewModel()
+            {
+
+                PatientMedication = _patientMedicationRepo.GetPatientMedicationsById(id),
+                Medications = _medicationRepo.GetAllMedications()
+            };
+
+            if (vm.PatientMedication == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(vm);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePatientMedication(int id, PatientMedicationFormViewModel vm)
+        {
+            try
+            {
+                vm.PatientMedication = _patientMedicationRepo.GetPatientMedicationsById(id);
+                _patientMedicationRepo.DeletePatientMedication(vm.PatientMedication);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+
+                return View(vm);
+
+            }
+        }
+
         private int GetCurrentUserId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);

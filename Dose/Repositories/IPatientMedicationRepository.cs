@@ -9,5 +9,6 @@ namespace Dose.Repositories
         List<PatientMedication> GetAllPatientMedicationsByPatientId(int patientId);
         void AddPatientMedication(PatientMedication patientMedication);
         void UpdatePatientMedication(PatientMedication patientMedication);
+        void DeletePatientMedication(PatientMedication patientMedication);
     }
 }
