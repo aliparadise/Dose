@@ -201,5 +201,25 @@ namespace Dose.Repositories
                 }
             }
         }
+
+        public void DeletePatientMedication(PatientMedication patientMedication)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            DELETE FROM PatientMedication
+                            WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", patientMedication.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
+

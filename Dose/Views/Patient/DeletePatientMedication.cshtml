@@ -1,0 +1,16 @@
+﻿@model Dose.Models.PatientMedicationFormViewModel
+
+@{
+    ViewData["Title"] = "DeletePatientMedication";
+}
+
+<h1>Delete Patient Medication</h1>
+
+<h3>Are you sure you want to delete @Model.PatientMedication.Medication.MedicationName?</h3>
+<div>
+    
+    <form asp-action="DeletePatientMedication">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
