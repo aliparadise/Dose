@@ -1,27 +1,33 @@
-﻿@model Dose.Models.PatientMedicationFormViewModel
+﻿@model Dose.Models.PatientMedicationFormViewModel 
 
 @{
-    ViewData["Title"] = "CreatePatientMedication";
+    ViewData["Title"] = "EditPatientMedication";
 }
 
-<h1>Add New Patient Medication</h1>
+<h1>Edit Patient Medication</h1>
 
 <h4>Patient Medication</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreatePatientMedication">
+        <form asp-action="EditPatientMedication">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="PatientMedication.Id" type="hidden" />
+            </div>
+            <div class="form-group">
+                <input asp-for="PatientMedication.PatientId" type="hidden" />
+            </div>
             <div class="form-group">
                 <label asp-for="PatientMedication.MedicationId" class="control-label"></label>
                 <select asp-for="PatientMedication.MedicationId" class="form-control" >
-                    <option value="">Select Medication</option>
+                <option value="">Select Medication</option>
                     @foreach (Medication medication in Model.Medications)
                 {
                     <option value="@medication.Id">@medication.MedicationName</option>
                 }
                 </select>
-                <span asp-validation-for="PatientMedication.MedicationId" class="text-danger"></span>
+             <span asp-validation-for="PatientMedication.MedicationId" class="text-danger"></span>   
             </div>
             <div class="form-group">
                 <label asp-for="PatientMedication.Dosage" class="control-label"></label>
@@ -44,7 +50,7 @@
                 <span asp-validation-for="PatientMedication.Notes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -57,3 +63,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+                
+                
+                
