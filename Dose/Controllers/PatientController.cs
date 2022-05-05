@@ -112,11 +112,11 @@ namespace Dose.Controllers
             return View(patientMedications);
         }
 
-        public ActionResult CreatePatientMedication(int id)
+        public ActionResult CreatePatientMedication()
         {
             List<Medication> medications = _medicationRepo.GetAllMedications();
 
-            CreatePatientMedicationFormViewModel vm = new CreatePatientMedicationFormViewModel()
+            PatientMedicationFormViewModel vm = new PatientMedicationFormViewModel()
             {   
                
                 PatientMedication = new PatientMedication(),
@@ -138,12 +138,50 @@ namespace Dose.Controllers
             }
             catch (Exception ex)
             {
-                CreatePatientMedicationFormViewModel vm = new CreatePatientMedicationFormViewModel()
+                PatientMedicationFormViewModel vm = new PatientMedicationFormViewModel()
                 {
                     PatientMedication = patientMedication,
                     Medications = _medicationRepo.GetAllMedications()
                 };
 
+                return View(vm);
+
+            }
+        }
+
+        public ActionResult EditPatientMedication(int id)
+        {
+
+            PatientMedicationFormViewModel vm = new PatientMedicationFormViewModel()
+            {
+
+                PatientMedication = _patientMedicationRepo.GetPatientMedicationsById(id),
+                Medications = _medicationRepo.GetAllMedications()
+            };
+
+            if (vm.PatientMedication == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(vm);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPatientMedication(PatientMedicationFormViewModel vm)
+        {
+            try
+            {
+                
+                _patientMedicationRepo.UpdatePatientMedication(vm.PatientMedication);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                
                 return View(vm);
 
             }
