@@ -1,5 +1,6 @@
 ﻿using Dose.Models;
 using Dose.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,6 +26,7 @@ namespace Dose.Controllers
         }
 
         // GET: PatientController
+        [Authorize]
         public ActionResult Index()
         {
             int userProfileId = GetCurrentUserId();
@@ -40,6 +42,7 @@ namespace Dose.Controllers
         }
 
         // GET: PatientController/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -65,6 +68,7 @@ namespace Dose.Controllers
         }
 
         // GET: PatientController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             return View();
@@ -86,6 +90,7 @@ namespace Dose.Controllers
         }
 
         // GET: PatientController/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
             return View();
@@ -105,13 +110,21 @@ namespace Dose.Controllers
                 return View();
             }
         }
+        [Authorize]
         public ActionResult MedicationDetails(int id)
         {
-
+            int userProfileId = GetCurrentUserId();
             List<PatientMedication> patientMedications = _patientMedicationRepo.GetAllPatientMedicationsByPatientId(id);
+
+            if (userProfileId != GetCurrentUserId())
+            {
+                return NotFound();
+            }
+
             return View(patientMedications);
         }
 
+        [Authorize]
         public ActionResult CreatePatientMedication()
         {
             List<Medication> medications = _medicationRepo.GetAllMedications();
@@ -149,6 +162,7 @@ namespace Dose.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult EditPatientMedication(int id)
         {
 
@@ -187,6 +201,7 @@ namespace Dose.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult DeletePatientMedication(int id)
         {
             PatientMedicationFormViewModel vm = new PatientMedicationFormViewModel()
