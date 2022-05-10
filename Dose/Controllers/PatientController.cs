@@ -78,21 +78,36 @@ namespace Dose.Controllers
         [Authorize]
         public ActionResult Edit(int id)
         {
-            return View();
+            Patient patient = _patientRepo.GetPatientById(id);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            if (patient.UserProfileId != GetCurrentUserId())
+            {
+                return NotFound();
+            }
+
+            return View(patient);
         }
 
         // POST: PatientController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [Authorize]
+        public ActionResult Edit(int id, Patient patient)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _patientRepo.UpdatePatient(patient);
+
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(patient);
             }
         }
 

@@ -132,6 +132,36 @@ namespace Dose.Repositories
                 }
             }
         }
+        public void UpdatePatient(Patient patient)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            UPDATE Patient
+                            SET
+                                UserProfileId = @userProfileId,
+                                FirstName = @firstName,
+                                LastName = @lastName,
+                                Age = @age,
+                                Weight = @weight,
+                                Notes = @notes
+                            WHERE Id= @id";
+
+                    cmd.Parameters.AddWithValue("@userProfileId", patient.UserProfileId);
+                    cmd.Parameters.AddWithValue("@firstName", patient.FirstName);
+                    cmd.Parameters.AddWithValue("@lastName", patient.LastName);
+                    cmd.Parameters.AddWithValue("@age", patient.Age);
+                    cmd.Parameters.AddWithValue("@weight", patient.Weight);
+                    cmd.Parameters.AddWithValue("@notes", DbUtils.ValueOrDBNull(patient.Notes));
+                    cmd.Parameters.AddWithValue("@id", patient.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
 
