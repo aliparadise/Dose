@@ -23,6 +23,48 @@ namespace Dose.Repositories
             }
         }
 
+        public Patient GetPatientById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT Id, UserProfileId, FirstName, LastName, Age, Weight, Notes
+                        FROM Patient
+                        WHERE Id = @id
+                    ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            Patient patient = new Patient
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                Age = reader.GetInt32(reader.GetOrdinal("Age")),
+                                Weight = reader.GetDecimal(reader.GetOrdinal("Weight")),
+                                Notes = DbUtils.GetNullableString(reader, "Notes"),
+                            };
+
+                            return patient;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
+
+
         public List<Patient> GetAllPatientsByUserId(int userProfileId)
         {
             using (SqlConnection conn = Connection)

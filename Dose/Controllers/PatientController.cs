@@ -38,7 +38,14 @@ namespace Dose.Controllers
         // GET: PatientController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Patient patient = _patientRepo.GetPatientById(id);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            return View(patient);
         }
 
         // GET: PatientController/Create
