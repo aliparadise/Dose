@@ -8,5 +8,6 @@ namespace Dose.Repositories
         List<Patient> GetAllPatientsByUserId(int userProfileId);
         Patient GetPatientById(int id);
         void AddPatient(Patient patient);
+        void UpdatePatient(Patient patient);
     }
 }
