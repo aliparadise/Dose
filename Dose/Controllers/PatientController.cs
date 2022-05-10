@@ -115,21 +115,26 @@ namespace Dose.Controllers
         [Authorize]
         public ActionResult Delete(int id)
         {
-            return View();
+            Patient patient = _patientRepo.GetPatientById(id);
+
+            return View(patient);
         }
 
         // POST: PatientController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [Authorize]
+        public ActionResult Delete(int id, Patient patient)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _patientRepo.DeletePatient(id);
+
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(patient);
             }
         }
         [Authorize]
